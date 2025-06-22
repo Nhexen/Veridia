@@ -473,8 +473,7 @@ function App() {
                                     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
                                 }
                             }}
-                        />
-                        <IconButton
+                        />                        <IconButton
                             onClick={handleSendMessage}
                             disabled={!currentMessage.trim() || isLoading}
                             sx={{
@@ -486,12 +485,28 @@ function App() {
                                 '&:hover': {
                                     background: currentMessage.trim() && !isLoading
                                         ? 'linear-gradient(135deg, #0056b3 0%, #4a47a3 100%)'
+                                        : '#e5e5ea',
+                                    color: currentMessage.trim() && !isLoading ? 'white' : '#007AFF'
+                                },
+                                '&:active': {
+                                    transform: 'scale(0.95)',
+                                    background: currentMessage.trim() && !isLoading
+                                        ? 'linear-gradient(135deg, #0051D0 0%, #3B3892 100%)'
                                         : '#e5e5ea'
                                 },
-                                transition: 'all 0.2s ease'
+                                transition: 'all 0.2s ease',
+                                '& .fa-paper-plane': {
+                                    transition: 'color 0.2s ease'
+                                }
                             }}
                         >
-                            <FontAwesomeIcon icon={faPaperPlane} />
+                            <FontAwesomeIcon
+                                icon={faPaperPlane}
+                                className="fa-paper-plane"
+                                style={{
+                                    transition: 'color 0.2s ease'
+                                }}
+                            />
                         </IconButton>
                     </Box>
                 </Paper>
