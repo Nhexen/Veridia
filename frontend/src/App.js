@@ -19,46 +19,45 @@ function App() {
             const data = await response.json();
             setResult(data.choices?.[0]?.message?.content || JSON.stringify(data));
         } catch (err) {
-            setResult("Erreur lors de la génération.");
+            setResult("Error during generation.");
         }
         setLoading(false);
     };
 
-    return (
-        <Container maxWidth="md" sx={{ mt: 6 }}>
-            <Paper elevation={3} sx={{ p: 4 }}>
-                <Typography variant="h4" gutterBottom>
-                    Client AI (LM Studio)
-                </Typography>
-                <Box component="form" onSubmit={handleSubmit} mb={2}>
-                    <TextField
-                        label="Votre prompt"
-                        fullWidth
-                        multiline
-                        minRows={3}
-                        value={prompt}
-                        onChange={e => setPrompt(e.target.value)}
-                        disabled={loading}
-                    />
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        sx={{ mt: 2 }}
-                        disabled={loading || !prompt.trim()}
-                    >
-                        {loading ? "Génération..." : "Générer"}
-                    </Button>
+    return (<Container maxWidth="md" sx={{ mt: 6 }}>
+        <Paper elevation={3} sx={{ p: 4 }}>
+            <Typography variant="h4" gutterBottom>
+                Veridia - AI Code Assistant
+            </Typography>
+            <Box component="form" onSubmit={handleSubmit} mb={2}>
+                <TextField
+                    label="Your prompt"
+                    fullWidth
+                    multiline
+                    minRows={3}
+                    value={prompt}
+                    onChange={e => setPrompt(e.target.value)}
+                    disabled={loading}
+                />
+                <Button
+                    type="submit"
+                    variant="contained"
+                    sx={{ mt: 2 }}
+                    disabled={loading || !prompt.trim()}
+                >
+                    {loading ? "Generating..." : "Generate"}
+                </Button>
+            </Box>
+            {result && (
+                <Box mt={3}>
+                    <Typography variant="h6">Result:</Typography>
+                    <Paper sx={{ p: 2, mt: 1, background: "#f5f5f5" }}>
+                        <pre style={{ margin: 0, whiteSpace: "pre-wrap" }}>{result}</pre>
+                    </Paper>
                 </Box>
-                {result && (
-                    <Box mt={3}>
-                        <Typography variant="h6">Résultat :</Typography>
-                        <Paper sx={{ p: 2, mt: 1, background: "#f5f5f5" }}>
-                            <pre style={{ margin: 0, whiteSpace: "pre-wrap" }}>{result}</pre>
-                        </Paper>
-                    </Box>
-                )}
-            </Paper>
-        </Container>
+            )}
+        </Paper>
+    </Container>
     );
 }
 

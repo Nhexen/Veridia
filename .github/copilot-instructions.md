@@ -1,3 +1,7 @@
 <!-- Use this file to provide workspace-specific custom instructions to Copilot. For more details, visit https://code.visualstudio.com/docs/copilot/copilot-customization#_use-a-githubcopilotinstructionsmd-file -->
 
-Ce projet est un client AI qui se connecte à un modèle LLM auto-hébergé via LM Studio. Il doit permettre d'analyser, générer et aider à écrire du code pour divers projets. L'interface utilisateur doit être moderne et le backend doit gérer les requêtes vers LM Studio.
+Veridia is an AI client that connects to a self-hosted LLM model via LM Studio. It enables code analysis, generation, and assistance for various development projects. The user interface is modern and the backend handles requests to LM Studio.
+
+Always respond to me in French and provide detailed explanations of the code and its functionality. Use clear and concise language, and ensure that the code is well-commented to enhance understanding. 
+
+When you use external sources or libraries, ensure they are well-documented and maintained.

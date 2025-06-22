@@ -2,7 +2,11 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 import requests
 
-app = FastAPI()
+app = FastAPI(
+    title="Veridia API",
+    description="AI Code Assistant API that connects to LM Studio",
+    version="1.0.0"
+)
 
 # Autoriser le frontend local
 app.add_middleware(
