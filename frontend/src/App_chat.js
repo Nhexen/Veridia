@@ -8,6 +8,9 @@ import {
     faBrain, faUser, faRobot, faPaperPlane, faCopy, faTrash,
     faMemory, faClock, faCode
 } from '@fortawesome/free-solid-svg-icons';
+import ReactMarkdown from 'react-markdown';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 function App() {
     const [messages, setMessages] = useState([]);
@@ -142,17 +145,30 @@ function App() {
             hour: '2-digit',
             minute: '2-digit'
         });
-    };
-
-    return (
-        <Box
-            sx={{
-                height: '100vh',
-                background: 'linear-gradient(180deg, #f5f7fa 0%, #c3cfe2 100%)',
-                display: 'flex',
-                flexDirection: 'column'
-            }}
-        >
+    };    return (
+        <>
+            {/* Background fixe */}
+            <Box
+                sx={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'linear-gradient(180deg, #f5f7fa 0%, #c3cfe2 100%)',
+                    zIndex: -1
+                }}
+            />
+            
+            {/* Contenu principal */}
+            <Box
+                sx={{
+                    height: '100vh',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    position: 'relative'
+                }}
+            >
             {/* Header avec style Apple */}
             <AppBar
                 position="static"
@@ -179,13 +195,12 @@ function App() {
                             }}
                         >
                             <FontAwesomeIcon icon={faBrain} size="lg" />
-                        </Box>
-                        <Typography
+                        </Box>                        <Typography
                             variant="h6"
                             sx={{
                                 fontWeight: 600,
                                 color: '#1d1d1f',
-                                fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+                                fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", "Helvetica", "Arial", sans-serif'
                             }}
                         >
                             Veridia
@@ -280,11 +295,17 @@ function App() {
                                 icon={faCode}
                                 size="3x"
                                 style={{ marginBottom: '16px', color: '#8e8e93' }}
-                            />
-                            <Typography variant="h6" sx={{ color: '#8e8e93', mb: 1 }}>
+                            />                            <Typography variant="h6" sx={{ 
+                                color: '#8e8e93', 
+                                mb: 1,
+                                fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", "Helvetica", "Arial", sans-serif'
+                            }}>
                                 Bienvenue sur Veridia
                             </Typography>
-                            <Typography variant="body2" sx={{ color: '#8e8e93' }}>
+                            <Typography variant="body2" sx={{ 
+                                color: '#8e8e93',
+                                fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", "Helvetica", "Arial", sans-serif'
+                            }}>
                                 Votre assistant IA personnel pour le développement
                             </Typography>
                         </Box>
@@ -334,20 +355,144 @@ function App() {
                                             : 'none',
                                         position: 'relative'
                                     }}
-                                >
-                                    <Typography
-                                        variant="body1"
-                                        sx={{
-                                            fontFamily: message.type === 'assistant'
-                                                ? "'SF Mono', 'Monaco', 'Consolas', monospace"
-                                                : 'inherit',
-                                            whiteSpace: 'pre-wrap',
-                                            fontSize: '14px',
-                                            lineHeight: 1.5
-                                        }}
-                                    >
-                                        {message.content}
-                                    </Typography>
+                                >                                    {message.type === 'user' ? (
+                                        <Typography
+                                            variant="body1"
+                                            sx={{
+                                                fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", "Helvetica", "Arial", sans-serif',
+                                                whiteSpace: 'pre-wrap',
+                                                fontSize: '15px',
+                                                lineHeight: 1.47,
+                                                fontWeight: 400
+                                            }}
+                                        >
+                                            {message.content}
+                                        </Typography>
+                                    ) : (
+                                        <ReactMarkdown
+                                            components={{
+                                                code({ node, inline, className, children, ...props }) {
+                                                    const match = /language-(\w+)/.exec(className || '');
+                                                    return !inline && match ? (
+                                                        <SyntaxHighlighter
+                                                            style={oneLight}
+                                                            language={match[1]}
+                                                            PreTag="div"
+                                                            customStyle={{
+                                                                margin: '12px 0',
+                                                                borderRadius: '8px',
+                                                                fontSize: '13px',
+                                                                fontFamily: '"SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace'
+                                                            }}
+                                                            {...props}
+                                                        >
+                                                            {String(children).replace(/\n$/, '')}
+                                                        </SyntaxHighlighter>
+                                                    ) : (
+                                                        <code 
+                                                            className={className} 
+                                                            style={{
+                                                                backgroundColor: 'rgba(0, 0, 0, 0.08)',
+                                                                padding: '2px 4px',
+                                                                borderRadius: '4px',
+                                                                fontSize: '13px',
+                                                                fontFamily: '"SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace'
+                                                            }}
+                                                            {...props}
+                                                        >
+                                                            {children}
+                                                        </code>
+                                                    );
+                                                },
+                                                p: ({ children }) => (
+                                                    <Typography
+                                                        variant="body1"
+                                                        component="p"
+                                                        sx={{
+                                                            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", "Helvetica", "Arial", sans-serif',
+                                                            fontSize: '15px',
+                                                            lineHeight: 1.47,
+                                                            fontWeight: 400,
+                                                            margin: '6px 0'
+                                                        }}
+                                                    >
+                                                        {children}
+                                                    </Typography>
+                                                ),
+                                                h1: ({ children }) => (
+                                                    <Typography variant="h4" sx={{ 
+                                                        fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Icons", "Helvetica Neue", "Helvetica", "Arial", sans-serif',
+                                                        fontWeight: 700,
+                                                        my: 2
+                                                    }}>
+                                                        {children}
+                                                    </Typography>
+                                                ),
+                                                h2: ({ children }) => (
+                                                    <Typography variant="h5" sx={{ 
+                                                        fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Icons", "Helvetica Neue", "Helvetica", "Arial", sans-serif',
+                                                        fontWeight: 600,
+                                                        my: 1.5
+                                                    }}>
+                                                        {children}
+                                                    </Typography>
+                                                ),
+                                                h3: ({ children }) => (
+                                                    <Typography variant="h6" sx={{ 
+                                                        fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Icons", "Helvetica Neue", "Helvetica", "Arial", sans-serif',
+                                                        fontWeight: 600,
+                                                        my: 1
+                                                    }}>
+                                                        {children}
+                                                    </Typography>
+                                                ),
+                                                ul: ({ children }) => (
+                                                    <Box component="ul" sx={{ 
+                                                        pl: 3,
+                                                        my: 1,
+                                                        '& li': {
+                                                            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", "Helvetica", "Arial", sans-serif',
+                                                            fontSize: '15px',
+                                                            lineHeight: 1.47,
+                                                            mb: 0.5
+                                                        }
+                                                    }}>
+                                                        {children}
+                                                    </Box>
+                                                ),
+                                                ol: ({ children }) => (
+                                                    <Box component="ol" sx={{ 
+                                                        pl: 3,
+                                                        my: 1,
+                                                        '& li': {
+                                                            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", "Helvetica", "Arial", sans-serif',
+                                                            fontSize: '15px',
+                                                            lineHeight: 1.47,
+                                                            mb: 0.5
+                                                        }
+                                                    }}>
+                                                        {children}
+                                                    </Box>
+                                                ),
+                                                blockquote: ({ children }) => (
+                                                    <Box sx={{
+                                                        borderLeft: '4px solid #007AFF',
+                                                        pl: 2,
+                                                        py: 1,
+                                                        my: 1,
+                                                        backgroundColor: 'rgba(0, 122, 255, 0.05)',
+                                                        borderRadius: '0 8px 8px 0',
+                                                        fontStyle: 'italic',
+                                                        fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", "Helvetica", "Arial", sans-serif'
+                                                    }}>
+                                                        {children}
+                                                    </Box>
+                                                )
+                                            }}
+                                        >
+                                            {message.content}
+                                        </ReactMarkdown>
+                                    )}
 
                                     {message.type === 'assistant' && !message.isError && (
                                         <Tooltip title="Copier le code">
@@ -365,15 +510,14 @@ function App() {
                                                 <FontAwesomeIcon icon={faCopy} size="xs" />
                                             </IconButton>
                                         </Tooltip>
-                                    )}
-
-                                    <Typography
+                                    )}                                    <Typography
                                         variant="caption"
                                         sx={{
                                             display: 'block',
-                                            mt: 0.5,
+                                            mt: 1,
                                             opacity: 0.7,
-                                            fontSize: '11px'
+                                            fontSize: '11px',
+                                            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", "Helvetica", "Arial", sans-serif'
                                         }}
                                     >
                                         {formatTime(message.timestamp)}
@@ -428,8 +572,10 @@ function App() {
                                                     }}
                                                 />
                                             ))}
-                                        </Box>
-                                        <Typography variant="caption" sx={{ color: '#8e8e93' }}>
+                                        </Box>                                        <Typography variant="caption" sx={{ 
+                                            color: '#8e8e93',
+                                            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", "Helvetica", "Arial", sans-serif'
+                                        }}>
                                             Veridia réfléchit...
                                         </Typography>
                                     </Box>
@@ -463,14 +609,13 @@ function App() {
                             onChange={(e) => setCurrentMessage(e.target.value)}
                             onKeyPress={handleKeyPress}
                             disabled={isLoading}
-                            variant="standard"
-                            InputProps={{
+                            variant="standard"                            InputProps={{
                                 disableUnderline: true,
                                 sx: {
                                     px: 2,
                                     py: 1,
                                     fontSize: '16px',
-                                    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+                                    fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", "Helvetica", "Arial", sans-serif'
                                 }
                             }}
                         />
@@ -493,10 +638,10 @@ function App() {
                         >
                             <FontAwesomeIcon icon={faPaperPlane} />
                         </IconButton>
-                    </Box>
-                </Paper>
+                    </Box>                </Paper>
             </Box>
         </Box>
+        </>
     );
 }
 

@@ -102,8 +102,7 @@ async def generate_code(request: Request):
         response = requests.post(
             LM_STUDIO_API_URL, 
             json=payload,
-            timeout=120  # Timeout de 2 minutes
-        )
+            timeout=120  # Timeout de 2 minutes        )
         
         request_end = time.time()
         
@@ -128,25 +127,20 @@ async def generate_code(request: Request):
         lm_studio_time = request_end - request_start
         processing_time = total_time - lm_studio_time
         
-        # Extraction des informations depuis la réponse LM Studio
-        generated_text = result.get('choices', [{}])[0].get('message', {}).get('content', 'Erreur: pas de contenu généré')
+        # Extraction des informations de la réponse
+        generated_text = ""
+        if result.get("choices") and len(result["choices"]) > 0:
+            generated_text = result["choices"][0]["message"]["content"]
         
-        # Informations sur les tokens
-        usage_info = result.get('usage', {})
-        prompt_tokens = usage_info.get('prompt_tokens', 0)
-        completion_tokens = usage_info.get('completion_tokens', 0)
-        total_tokens = usage_info.get('total_tokens', prompt_tokens + completion_tokens)
+        # Calcul approximatif des tokens
+        prompt_tokens = len(prompt.split())
+        completion_tokens = len(generated_text.split())
+        total_tokens = prompt_tokens + completion_tokens
         
-        # Création de la réponse enrichie
+        # Enrichissement de la réponse avec les statistiques
         enhanced_response = {
-            "choices": [
-                {
-                    "message": {
-                        "content": generated_text,
-                        "role": "assistant"
-                    }
-                }
-            ],
+            "choices": result.get("choices", []),
+            "model": result.get("model", DEFAULT_MODEL),
             "usage": {
                 "prompt_tokens": prompt_tokens,
                 "completion_tokens": completion_tokens,
