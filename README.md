@@ -152,7 +152,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **[LM Studio](https://lmstudio.ai/)** - For the excellent local LLM runtime
 - **[FastAPI](https://fastapi.tiangolo.com/)** - For the modern Python web framework
 - **[React](https://reactjs.org/)** - For the powerful frontend library
-- **[Material-UI](https://mui.com/)** - For the beautiful component library
+- **[FontAwesome](https://fontawesome.com/)** - For the beautiful component library
 
 ## 📞 Support
 
